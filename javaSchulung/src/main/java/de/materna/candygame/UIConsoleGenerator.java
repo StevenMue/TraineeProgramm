@@ -53,7 +53,7 @@ public class UIConsoleGenerator {
                     "", "");
         }
         System.out.println("+"+"-".repeat(41)+"+");
-        System.out.printf("%-14s | %-14s | %-14s%n","[t]ravel","[b]uy","[s]ell");
+        System.out.printf(" %-14s | %-14s%n","[b]uy","[s]ell");
         System.out.printf("%-14s | %-14s %n","[r]eturn","[l]eave");
     }
     //TODO change that playercity is not shown
