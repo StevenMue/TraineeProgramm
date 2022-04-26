@@ -30,7 +30,7 @@ public class Controller {
     private Controller() {
     }
 
-    private Controller(int amountOfPlayer) {
+    Controller(int amountOfPlayer) {
         for (int i = 0; i < amountOfPlayer; i++) {
             players.add(new Player(2000, CityENUM.CENTRAL));
         }
@@ -372,7 +372,8 @@ public class Controller {
 
     private void endGame() {
         if (currentDay == 30) {
-            ui.printScoreBoard(players.get(0).getBalance() - bank.getPlayerAccount(players.get(0)).getPlayerDebt());
+            ui.printScoreBoard((players.get(0).getBalance()+bank.getPlayerAccount(players.get(0)).getPlayerAccountBalance()) -
+                    bank.getPlayerAccount(players.get(0)).getPlayerDebt());
             ui.message("Press enter");
             getUserInput();
         }
@@ -392,17 +393,22 @@ public class Controller {
     //TODO move to City
     private void randomCityCosts() {
         for (Candy candy : Candy.values()) {
-            this.candys[candy.getNr()] = r.nextInt(candy.minPrice(), candy.maxPrice());
+            this.candys[candy.getID()] = r.nextInt(candy.minPrice(), candy.maxPrice());
         }
     }
 
+
+    /**
+     * Function for running the game
+     */
     public void run() {
         this.randomCityCosts();
         while (this.currentDay < 30) {
             switch (state.name()) {
                 case "BANK" -> ui.printBankWindow(bank, players.get(0));
                 case "MARKET" -> ui.printMarketWindow(candys, players.get(0));
-                default -> ui.printPlayerWindow(players.get(0), players.get(0).getCurrentCityENUM() == bank.homecity);
+                default -> ui.printPlayerWindow(players.get(0),
+                        players.get(0).getCurrentCityENUM() == bank.homecity);
             }
             this.handler(this.getUserInput());
             this.nextDay();

@@ -4,7 +4,12 @@ import de.materna.candygame.enums.Candy;
 import de.materna.candygame.enums.CityENUM;
 
 public class UIConsoleGenerator {
-
+    /**
+     * Print the market window which contains the market candys and candy prices of that city and
+     * print the player window with the amount of candy and the money
+     * @param cityCandyCosts the candy costs of that city
+     * @param player the player who is in that city market
+     */
     void printMarketWindow(int[] cityCandyCosts, Player player){
         clearScreen();
         System.out.println("+"+"-".repeat(41)+"+");
@@ -56,6 +61,13 @@ public class UIConsoleGenerator {
         System.out.printf(" %-14s | %-14s%n","[b]uy","[s]ell");
         System.out.printf("%-14s | %-14s %n","[r]eturn","[l]eave");
     }
+
+    /**
+     * Print the travel window which contains the cities and the travel costs
+     * @param travelCost the travel cost to get to the cities
+     * @param player the player who wants to travel
+     * @param currentDay the current in game day
+     */
     //TODO change that playercity is not shown
     void printTravelTargets(int[] travelCost, Player player, int currentDay){
         clearScreen();
@@ -82,6 +94,12 @@ public class UIConsoleGenerator {
         System.out.printf("%-14s %n","[r]eturn");
         System.out.print("Pls enter the number of the City you want to travel:");
     }
+
+    /**
+     * Print the bank window which show the account of the player and the player window
+     * @param bank the bank where the player is.
+     * @param player the player who is in the bank
+     */
     void printBankWindow(Bank bank, Player player){
         clearScreen();
         Account playerAccount = bank.getPlayerAccount(player);
@@ -140,6 +158,11 @@ public class UIConsoleGenerator {
         System.out.printf("%-14s | %-14s %n","[r]eturn","[l]eave");
     }
 
+    /**
+     * The main player window it contains the items and money of the player
+     * @param player
+     * @param bankCity
+     */
     void printPlayerWindow(Player player, boolean bankCity){
         clearScreen();
 
@@ -179,6 +202,10 @@ public class UIConsoleGenerator {
         System.out.printf("%-14s | %-14s %n","[r]eturn","[l]eave");
     }
 
+    /**
+     * print the scoreboard which show the difference between owned money and debt.
+     * @param score the score of the player
+     */
     void printScoreBoard(int score){
         clearScreen();
         System.out.println("+"+"/\\".repeat(20)+"/+");
@@ -190,12 +217,27 @@ public class UIConsoleGenerator {
         );
         System.out.println("+"+"/\\".repeat(20)+"/+");
     }
+
+    /**
+     * print 10 empty lines to clear the window
+     */
     public static void clearScreen() {
         System.out.printf("%n".repeat(10));
     }
+
+    /**
+     * Print out a single message
+     * @param msg message to be printed
+     */
     public void message (String msg){
         System.out.println(msg);
     }
+
+    /**
+     * Print the error message
+     * needed a input from the user to acknowledge it
+     * @param msg message to be printed
+     */
     public void errorMessage (String msg){
         System.out.println(msg);
         System.out.println("Press a enter...");
