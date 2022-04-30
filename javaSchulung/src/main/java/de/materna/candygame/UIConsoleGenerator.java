@@ -200,7 +200,7 @@ public class UIConsoleGenerator {
         }else{
             System.out.printf("%-14s | %-14s | %-14s%n","[t]ravel","[m]arket","[b]ank");
         }
-        System.out.printf("%-14s | %-14s %n","[r]eturn","[l]eave");
+        System.out.printf("%-14s  %n","[l]eave");
     }
 
     /**

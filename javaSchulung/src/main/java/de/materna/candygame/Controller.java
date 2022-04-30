@@ -456,7 +456,6 @@ public class Controller {
      */
     private void endGame() {
         int[] scores=new int[amountOfPlayers];
-        if (currentDay == 30) {
             for (Player player:players) {
                scores[player.getNumber()-1] =(player.getBalance()+bank.getPlayerAccount(player).getPlayerAccountBalance()) -
                         bank.getPlayerAccount(player).getPlayerDebt();
@@ -464,7 +463,6 @@ public class Controller {
             ui.printScoreBoard(amountOfPlayers,scores);
             ui.message("Press enter");
             getUserInput();
-        }
     }
 
     /**
@@ -527,13 +525,16 @@ public class Controller {
      */
     public void run() {
         this.randomCityCosts();
-        currentDay=29;
-        while (this.currentDay < 30) {
+        boolean allBroke=false;
+        while (this.currentDay < 30&&!allBroke) {
             for (int i=0;i<amountOfPlayers;) {
                 currentPlayer=players.get(i);
                 if(currentPlayer.isBroke()||currentPlayer.isPlayerReady()){
+                    allBroke=true;
+                    i++;
                     continue;
                 }
+                allBroke=false;
             switch (state.name()) {
                 case "BANK" -> ui.printBankWindow(bank, currentPlayer);
                 case "MARKET" -> ui.printMarketWindow(candys[currentPlayer.getCurrentCityENUM().getID()], currentPlayer);
@@ -542,7 +543,7 @@ public class Controller {
             }
             this.handler(this.getUserInput());
             if(currentPlayer.isPlayerReady()){
-                i+=1;
+                i++;
             }
             }
             this.nextDay();
