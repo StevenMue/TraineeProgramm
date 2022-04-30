@@ -552,7 +552,7 @@ public class Controller {
     }
 
     public static void main(String[] args) {
-        Controller controller = new Controller(5);
+        Controller controller = new Controller(1);
         controller.run();
     }
 }

@@ -13,53 +13,53 @@ public class UIConsoleGenerator {
      */
     void printMarketWindow(int[] cityCandyCosts, Player player){
         clearScreen();
-        System.out.println("+"+"-".repeat(41)+"+");
-        System.out.printf("|%17s%s%18s|%n","","MARKET","");
-        System.out.println("+"+",".repeat(41)+"+");
+        System.out.println("+"+"-".repeat(49)+"+");
+        System.out.printf("|%20s%s%23s|%n","","MARKET","");
+        System.out.println("+"+",".repeat(49)+"+");
         if(Candy.values().length%2==0) {
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-13s: %2d€ $ %-13s: %2d€ $%n",
-                        Candy.values()[i].name(), cityCandyCosts[i],
-                        Candy.values()[i + 1].name(), cityCandyCosts[i + 1]);
+                System.out.printf("$ [%d] %-10s: %2d€  $ [%d] %-10s: %2d€     $%n",
+                        i,Candy.values()[i].name(), cityCandyCosts[i],
+                        i+1,Candy.values()[i + 1].name(), cityCandyCosts[i + 1]);
             }
         }else{
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-13s: %2d€  $ %-13s: %2d€ $%n",
-                        Candy.values()[i].name(), cityCandyCosts[i],
-                        Candy.values()[i + 1].name(), cityCandyCosts[i + 1]);
+                System.out.printf("$ [%d] %-10s: %2d€  $ [%d] %-10s: %2d€     $%n",
+                       i,Candy.values()[i].name(), cityCandyCosts[i],
+                       i+1,Candy.values()[i + 1].name(), cityCandyCosts[i + 1]);
             }
-            System.out.printf("$ %-13s: %2d€ $ %-13s: %2s€ $%n",
-                    Candy.values()[Candy.values().length-1].name(),
+            System.out.printf("$ [%d] %-10s: %2d€ $ %-13s: %2s€    $%n",
+                    Candy.values().length-1,Candy.values()[Candy.values().length-1].name(),
                     cityCandyCosts[Candy.values().length-1], "", "");
         }
-        System.out.println("+"+"-".repeat(41)+"+");
-        //TODO number length break UI
-        System.out.printf("$%14s%s%2d%s%17s$%n","","PLAYER[",player.getNumber(),"]","");
-        System.out.println("+"+",".repeat(41)+"+");
-        System.out.printf("$ %-10s: %5d€ $ %-10s: %5d  $%n",
+        System.out.println("+"+"-".repeat(49)+"+");
+
+        System.out.printf("$%19s%s%2d%s%20s$%n","","PLAYER[",player.getNumber(),"]","");
+        System.out.println("+"+",".repeat(49)+"+");
+        System.out.printf("$ %-10s: %5d€     $ %-14s: %5d  $%n",
                 "BALANCE",player.getBalance(),"Backpack", player.spaceLeft()
         );
         if(Candy.values().length%2==0) {
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-10s: %5d  $ %-10s: %5d  $%n",
-                        Candy.values()[i].name(), player.getItem(i),
-                        Candy.values()[i+1].name(), player.getItem(+1)
+                System.out.printf("$ [%d] %-10s: %5d  $ [%d] %-10s: %5d  $%n",
+                        i,Candy.values()[i].name(), player.getItem(i),
+                        i+1,Candy.values()[i+1].name(), player.getItem(+1)
                 );
             }
         }else{
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-10s: %5d  $ %-10s: %5d  $%n",
-                        Candy.values()[i].name(), player.getItem(i),
-                        Candy.values()[i+1].name(), player.getItem(+1)
+                System.out.printf("$ [%d] %-10s: %5d  $ [%d] %-10s: %5d  $%n",
+                        i,Candy.values()[i].name(), player.getItem(i),
+                        i+1,Candy.values()[i+1].name(), player.getItem(+1)
                 );
             }
-            System.out.printf("$ %-10s: %5d  $ %-10s: %5s  $%n",
-                    Candy.values()[Candy.values().length-1].name(),
+            System.out.printf("$ [%d] %-10s: %5d  $ %-10s: %5s  $%n",
+                    Candy.values().length-1,Candy.values()[Candy.values().length-1].name(),
                     player.getItem(Candy.values().length-1),
                     "", "");
         }
         System.out.println("+"+"-".repeat(41)+"+");
-        System.out.printf(" %-14s | %-14s%n","[b]uy","[s]ell");
+        System.out.printf("%-14s | %-14s%n","[b]uy","[s]ell");
         System.out.printf("%-14s | %-14s %n","[r]eturn","[l]eave");
     }
 
@@ -69,7 +69,7 @@ public class UIConsoleGenerator {
      * @param player the player who wants to travel
      * @param currentDay the current in game day
      */
-    //TODO change that playercity is not shown
+
     void printTravelTargets(int[] travelCost, Player player, int currentDay){
         clearScreen();
         System.out.println("+"+"-".repeat(45)+"+");
@@ -104,51 +104,51 @@ public class UIConsoleGenerator {
     void printBankWindow(Bank bank, Player player){
         clearScreen();
         Account playerAccount = bank.getPlayerAccount(player);
-        System.out.println("+"+"-".repeat(41)+"+");
-        System.out.printf("|%18s%s%19s|%n","","BANK","");
-        System.out.println("+"+",".repeat(41)+"+");
-        System.out.printf("$ %-10s: %5d€ $ %-10s: %5d€ $%n",
+        System.out.println("+"+"-".repeat(49)+"+");
+        System.out.printf("|%22s%s%23s|%n","","BANK","");
+        System.out.println("+"+",".repeat(49)+"+");
+        System.out.printf("$ %-10s: %5d€    $   %-12s: %5d€ $%n",
                 "DEBT",playerAccount.getPlayerDebt(),"BALANCE",playerAccount.getPlayerAccountBalance()
         );
         if(Candy.values().length%2==0) {
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-13s: %2d€ $ %-13s: %2d€ $%n",
-                        Candy.values()[i].name(), playerAccount.getItemAmount(i),
-                        Candy.values()[i + 1].name(), playerAccount.getItemAmount(i+1));
+                System.out.printf("$ [%d] %-10s: %2d€   $  [%d] %-10s: %2d€   $%n",
+                        i,Candy.values()[i].name(), playerAccount.getItemAmount(i),
+                        i+1,Candy.values()[i + 1].name(), playerAccount.getItemAmount(i+1));
             }
         }else{
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-13s: %2d€  $ %-13s: %2d€ $%n",
-                        Candy.values()[i].name(), playerAccount.getItemAmount(i),
-                        Candy.values()[i + 1].name(), playerAccount.getItemAmount(i+1));
+                System.out.printf("$ [%d] %-10s: %2d€    $  [%d] %-10s: %2d€   $%n",
+                        i,Candy.values()[i].name(), playerAccount.getItemAmount(i),
+                        i+1,Candy.values()[i + 1].name(), playerAccount.getItemAmount(i+1));
             }
-            System.out.printf("$ %-13s: %2d€ $ %-13s: %2s€ $%n",
-                    Candy.values()[Candy.values().length-1].name(),
+            System.out.printf("$ [%d] %-10s: %2d€   $  %-10s: %2s€   $%n",
+                    Candy.values().length-1,Candy.values()[Candy.values().length-1].name(),
                     playerAccount.getItemAmount(Candy.values().length-1), "", "");
         }
-        System.out.println("+"+"-".repeat(41)+"+");
-        //TODO number length break UI
-        System.out.printf("$%15s%s%2d%s%16s$%n","","PLAYER[",player.getNumber(),"]","");
-        System.out.println("+"+",".repeat(41)+"+");
-        System.out.printf("$ %-10s: %5d€ $ %-10s: %5d  $%n",
+        System.out.println("+"+"-".repeat(49)+"+");
+
+        System.out.printf("$%21s%s%2d%s%18s$%n","","PLAYER[",player.getNumber(),"]","");
+        System.out.println("+"+",".repeat(49)+"+");
+        System.out.printf("$ %-10s: %5d€     $ %-10s: %5d      $%n",
                 "BALANCE",player.getBalance(),"Backpack", player.spaceLeft()
         );
         if(Candy.values().length%2==0) {
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-10s: %5d  $ %-10s: %5d  $%n",
-                        Candy.values()[i].name(), player.getItem(i),
-                        Candy.values()[i+1].name(), player.getItem(+1)
+                System.out.printf("$ [%d] %-10s: %5d  $ [%d] %-10s: %5d  $%n",
+                        i,Candy.values()[i].name(), player.getItem(i),
+                        i+1,Candy.values()[i+1].name(), player.getItem(+1)
                 );
             }
         }else{
             for (int i = 0; i < Candy.values().length; i += 2) {
-                System.out.printf("$ %-10s: %5d  $ %-10s: %5d  $%n",
-                        Candy.values()[i].name(), player.getItem(i),
-                        Candy.values()[i+1].name(), player.getItem(+1)
+                System.out.printf("$ [%d] %-10s: %5d  $ [%d] %-10s: %5d  $%n",
+                        i,Candy.values()[i].name(), player.getItem(i),
+                        i+1,Candy.values()[i+1].name(), player.getItem(+1)
                 );
             }
-            System.out.printf("$ %-10s: %5d  $ %-10s: %5s $%n",
-                    Candy.values()[Candy.values().length-1].name(),
+            System.out.printf("$ [%d] %-10s: %5d  $ [%d] %-10s: %5s $%n",
+                    Candy.values().length-1,Candy.values()[Candy.values().length-1].name(),
                     player.getItem(Candy.values().length-1),
                     "", "");
         }
@@ -168,7 +168,7 @@ public class UIConsoleGenerator {
         clearScreen();
 
         System.out.println("+"+"-".repeat(41)+"+");
-        //TODO number length break UI
+
         System.out.printf("$%14s%s%2d%s%17s$%n","","PLAYER[",player.getNumber(),"]","");
         System.out.println("+"+",".repeat(41)+"+");
         System.out.printf("$ %-10s: %5d€ $ %-10s:  %4d  $%n",
@@ -210,7 +210,7 @@ public class UIConsoleGenerator {
     void printScoreBoard(int playerAmount, int[] score){
         clearScreen();
         System.out.println("+"+"/\\".repeat(20)+"/+");
-        //TODO number length break UI
+
         System.out.printf("$%15s%s%16s$%n","","SCOREBOARD","");
         System.out.println("+"+"/\\".repeat(20)+"/+");
         for(int i=0;i<playerAmount;i++){
