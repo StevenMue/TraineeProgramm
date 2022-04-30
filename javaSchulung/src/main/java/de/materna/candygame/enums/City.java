@@ -2,7 +2,7 @@ package de.materna.candygame.enums;
 
 import java.awt.geom.Point2D;
 
-public enum CityENUM {
+public enum City {
     BRONX(0, 3, 0),
     GHETTO(1, 5, 1),
     CENTRAL(0, 0, 2),
@@ -34,13 +34,13 @@ public enum CityENUM {
         }
     }
 
-    CityENUM(double x, double y, int id) {
+    City(double x, double y, int id) {
         this.coordinates = new Coordinates();
         this.coordinates.setLocation(x, y);
         this.ID = id;
     }
 
-    public double getDistance(CityENUM c2) {
+    public double getDistance(City c2) {
         //distance * distance = (y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1)
         return this.coordinates.distance(c2.coordinates.getX(), c2.coordinates.getY());
     }
@@ -49,8 +49,8 @@ public enum CityENUM {
         return this.ID;
     }
 
-    public static CityENUM getCity(int id) {
-        for (CityENUM city : CityENUM.values()) {
+    public static City getCity(int id) {
+        for (City city : City.values()) {
             if (city.getID() == id) {
                 return city;
             }

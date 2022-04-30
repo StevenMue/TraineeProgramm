@@ -1,12 +1,10 @@
 package de.materna.candygame;
 
 import de.materna.candygame.enums.Candy;
-import de.materna.candygame.enums.CityENUM;
-import org.junit.jupiter.api.BeforeAll;
+import de.materna.candygame.enums.City;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,10 +18,10 @@ class AccountTest {
 
     @BeforeEach
     void setUp() {
-        player= new Player(2000, CityENUM.CENTRAL);
+        player= new Player(0,2000, City.CENTRAL);
         players = new ArrayList<>();
         players.add(player);
-        bank = new Bank(players,CityENUM.BRONX);
+        bank = new Bank(players, City.BRONX);
         account = bank.getPlayerAccount(player);
     }
 
@@ -71,7 +69,7 @@ class AccountTest {
     @Test
     void getPlayer() {
         assertEquals(bank.getPlayerAccount(player).getPlayer(), player);
-        assertNotEquals(bank.getPlayerAccount(player).getPlayer(), new Player(1500,CityENUM.BRONX));
+        assertNotEquals(bank.getPlayerAccount(player).getPlayer(), new Player(0,1500, City.BRONX));
     }
 
     @Test

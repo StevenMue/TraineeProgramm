@@ -1,9 +1,10 @@
 package de.materna.candygame;
 
 import de.materna.candygame.enums.Candy;
-import de.materna.candygame.enums.CityENUM;
+import de.materna.candygame.enums.City;
 
 public class UIConsoleGenerator {
+    private boolean isEnd=false;
     /**
      * Print the market window which contains the market candys and candy prices of that city and
      * print the player window with the amount of candy and the money
@@ -33,7 +34,7 @@ public class UIConsoleGenerator {
         }
         System.out.println("+"+"-".repeat(41)+"+");
         //TODO number length break UI
-        System.out.printf("$%17s%s%18s$%n","","PLAYER","");
+        System.out.printf("$%14s%s%2d%s%17s$%n","","PLAYER[",player.getNumber(),"]","");
         System.out.println("+"+",".repeat(41)+"+");
         System.out.printf("$ %-10s: %5d€ $ %-10s: %5d  $%n",
                 "BALANCE",player.getBalance(),"Backpack", player.spaceLeft()
@@ -74,21 +75,21 @@ public class UIConsoleGenerator {
         System.out.println("+"+"-".repeat(45)+"+");
         System.out.printf("|%5s%s%2s<%2s%-11s:%4d%2s>%2s|%n","","Travel Targets","","","Days Left",currentDay,"","");
         System.out.println("+"+",".repeat(45)+"+");
-        if(CityENUM.values().length%2==0) {
-            for (int i = 0; i < CityENUM.values().length; i += 2) {
+        if(City.values().length%2==0) {
+            for (int i = 0; i < City.values().length; i += 2) {
                 System.out.printf("$ [%d]%-12s: %2d€ $ [%d]%-12s: %2d€ $%n",
-                        CityENUM.values()[i].getID(),CityENUM.values()[i].name(), travelCost[i],
-                        CityENUM.values()[i+1].getID(),CityENUM.values()[i + 1].name(), travelCost[i + 1]);
+                        City.values()[i].getID(), City.values()[i].name(), travelCost[i],
+                        City.values()[i+1].getID(), City.values()[i + 1].name(), travelCost[i + 1]);
             }
         }else{
             for (int i = 0; i < Candy.values().length; i += 2) {
                 System.out.printf("$ [%d]%-12s: %2d€ $ [%d]%-12s: %2d€ $%n",
-                        CityENUM.values()[i].getID(),CityENUM.values()[i].name(), travelCost[i],
-                        CityENUM.values()[i+1].getID(),CityENUM.values()[i + 1].name(), travelCost[i + 1]);
+                        City.values()[i].getID(), City.values()[i].name(), travelCost[i],
+                        City.values()[i+1].getID(), City.values()[i + 1].name(), travelCost[i + 1]);
             }
             System.out.printf("$ [%d]%-12s: %2d€ $    %-12s  %2s  $%n",
-                    CityENUM.values()[CityENUM.values().length-1].getID(),CityENUM.values()[CityENUM.values().length-1].name(),
-                    travelCost[CityENUM.values().length-1], "", "");
+                    City.values()[City.values().length-1].getID(), City.values()[City.values().length-1].name(),
+                    travelCost[City.values().length-1], "", "");
         }
         System.out.println("+"+"-".repeat(45)+"+");
         System.out.printf("%-14s %n","[r]eturn");
@@ -127,7 +128,7 @@ public class UIConsoleGenerator {
         }
         System.out.println("+"+"-".repeat(41)+"+");
         //TODO number length break UI
-        System.out.printf("$%18s%s%17s$%n","","PLAYER","");
+        System.out.printf("$%15s%s%2d%s%16s$%n","","PLAYER[",player.getNumber(),"]","");
         System.out.println("+"+",".repeat(41)+"+");
         System.out.printf("$ %-10s: %5d€ $ %-10s: %5d  $%n",
                 "BALANCE",player.getBalance(),"Backpack", player.spaceLeft()
@@ -168,7 +169,7 @@ public class UIConsoleGenerator {
 
         System.out.println("+"+"-".repeat(41)+"+");
         //TODO number length break UI
-        System.out.printf("$%17s%s%18s$%n","","PLAYER","");
+        System.out.printf("$%14s%s%2d%s%17s$%n","","PLAYER[",player.getNumber(),"]","");
         System.out.println("+"+",".repeat(41)+"+");
         System.out.printf("$ %-10s: %5d€ $ %-10s:  %4d  $%n",
                 "BALANCE",player.getBalance(),"Backpack", player.spaceLeft()
@@ -206,15 +207,16 @@ public class UIConsoleGenerator {
      * print the scoreboard which show the difference between owned money and debt.
      * @param score the score of the player
      */
-    void printScoreBoard(int score){
+    void printScoreBoard(int playerAmount, int[] score){
         clearScreen();
         System.out.println("+"+"/\\".repeat(20)+"/+");
         //TODO number length break UI
         System.out.printf("$%15s%s%16s$%n","","SCOREBOARD","");
-        System.out.println("+"+"^^".repeat(20)+"^+");
-        System.out.printf("|%9s%-8s: %10d€%10s |%n",
-                "","SCORE",score,""
-        );
+        System.out.println("+"+"/\\".repeat(20)+"/+");
+        for(int i=0;i<playerAmount;i++){
+            System.out.printf("$%8s%s%2d%2s%3s%s%5d%8s$%n","","Player[",i,"]","","SCORE:",score[i],"");
+            System.out.println("+"+"^^".repeat(20)+"^+");
+        }
         System.out.println("+"+"/\\".repeat(20)+"/+");
     }
 

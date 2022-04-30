@@ -1,13 +1,12 @@
 package de.materna.candygame;
 
 import de.materna.candygame.enums.Candy;
-import de.materna.candygame.enums.CityENUM;
+import de.materna.candygame.enums.City;
 import de.materna.candygame.enums.PlayerStates;
 import de.materna.candygame.events.Event;
 import de.materna.candygame.events.Gift;
 import de.materna.candygame.events.RandomNegativeTravelAmount;
 import de.materna.candygame.events.Thief;
-import static org.mockito.BDDMockito.*;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -15,33 +14,31 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Controller {
-    public static final String YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN = "You dont entered a number. Try again";
+    public static final String YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN = "You don't entered a number. Try again";
+    private final int amountOfPlayers;
     private int currentDay = 0;
     ArrayList<Player> players = new ArrayList<>();
     private Bank bank;
-    boolean returnFlag = false;
     private UIConsoleGenerator ui = new UIConsoleGenerator();
     PlayerStates state;
     Player currentPlayer;
 
     Random r;
-    int[] candys = new int[Candy.values().length];
+    int[][] candys=new int [City.values().length][Candy.values().length];
     StringBuilder sb = new StringBuilder();
-
-    private Controller() {
-    }
 
     /**
      * Constructor for initialise the game and its classes
-     * @param amountOfPlayer the number of players in the game
+     * @param amountOfPlayers the number of players in the game
      */
-    Controller(int amountOfPlayer) {
-        for (int i = 0; i < amountOfPlayer; i++) {
-            players.add(new Player(2000, CityENUM.CENTRAL));
+    Controller(int amountOfPlayers) {
+        for (int i = 0; i < amountOfPlayers; i++) {
+            players.add(new Player(i+1,2000, City.CENTRAL));
         }
         this.state = PlayerStates.IDLE;
-        bank = new Bank(players, CityENUM.BRONX);
+        bank = new Bank(players, City.BRONX);
         r = new Random();
+        this.amountOfPlayers=amountOfPlayers;
     }
 
     /**
@@ -83,7 +80,7 @@ public class Controller {
      */
     private void marketOrBank() {
         if (state == PlayerStates.IDLE) {
-            ui.printMarketWindow(candys, currentPlayer);
+            ui.printMarketWindow(candys[currentPlayer.getCurrentCityENUM().getID()], currentPlayer);
             state = PlayerStates.MARKET;
         } else if (state == PlayerStates.BANK) {
             storeMoney();
@@ -188,10 +185,9 @@ public class Controller {
             if (currentPlayer.spaceLeft() < amount) {
                 ui.errorMessage("You backpack cant hold so much! You have only " + currentPlayer.spaceLeft() + " space left!");
                 getUserInput();
-                returnFlag = true;
                 return;
             }
-            TaskCompletionState task = currentPlayer.reduceMoney(amount * candys[itemID]);
+            TaskCompletionState task = currentPlayer.reduceMoney(amount * candys[currentPlayer.getCurrentCityENUM().getID()][itemID]);
 
             if (task.isSuccess) {
                 task = currentPlayer.addItem(Candy.getCandy(itemID), amount);
@@ -203,11 +199,9 @@ public class Controller {
                 ui.errorMessage(task.msg);
                 getUserInput();
             }
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
             getUserInput();
-            returnFlag = true;
         } catch (ArrayIndexOutOfBoundsException a) {
             ui.errorMessage("A item with that ID doesn't exits");
             getUserInput();
@@ -227,16 +221,14 @@ public class Controller {
             int amount = Integer.parseInt(getUserInput());
             TaskCompletionState task = currentPlayer.reduceItem(Candy.getCandy(itemID), amount);
             if (task.isSuccess) {
-                currentPlayer.addMoney(amount * candys[itemID]);
+                currentPlayer.addMoney(amount * candys[currentPlayer.getCurrentCityENUM().getID()][itemID]);
             } else {
                 ui.errorMessage(task.msg);
                 getUserInput();
             }
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
             getUserInput();
-            returnFlag = true;
         } catch (ArrayIndexOutOfBoundsException a) {
             ui.errorMessage("A item with that ID doesn't exits");
             getUserInput();
@@ -258,11 +250,9 @@ public class Controller {
                 ui.errorMessage(task.msg);
                 getUserInput();
             }
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
             getUserInput();
-            returnFlag = true;
         } catch (ArrayIndexOutOfBoundsException a) {
             ui.errorMessage("A item with that ID doesn't exits");
             getUserInput();
@@ -289,10 +279,8 @@ public class Controller {
                     getUserInput();
                 }
             }
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
-            returnFlag = true;
         } catch (IllegalArgumentException a) {
             ui.errorMessage("A candy with that ID doesn't exits");
             getUserInput();
@@ -312,11 +300,9 @@ public class Controller {
                 ui.errorMessage(task.msg);
                 getUserInput();
             }
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
             getUserInput();
-            returnFlag = true;
         }
     }
 
@@ -333,11 +319,9 @@ public class Controller {
                 ui.errorMessage(task.msg);
                 getUserInput();
             }
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
             getUserInput();
-            returnFlag = true;
         }
     }
 
@@ -345,7 +329,6 @@ public class Controller {
      * Method to return to the player window.
      */
     private void goBack() {
-        returnFlag = true;
         state = PlayerStates.IDLE;
     }
 
@@ -362,26 +345,37 @@ public class Controller {
      * User need to enter the ID of the city.
      */
     private void travel() {
-        int[] costs = new int[CityENUM.values().length];
+        int[] costs = new int[City.values().length];
 
-        for (CityENUM city : CityENUM.values()) {
+        for (City city : City.values()) {
             costs[city.getID()] = calculateTravelCosts(city);
+        }
+        TaskCompletionState task=checkIfTravelIsPossible(costs);
+        if(!task.isSuccess){
+            ui.message(task.msg);
+            currentPlayer.setBroke(true);
+            return;
         }
         ui.printTravelTargets(costs, currentPlayer, currentDay);
         try {
             String input;
                 input = getUserInput();
                 if (input.equals("r")) {
-                    returnFlag = true;
                     return;
                 }
-            if(Integer.parseInt(input)>(CityENUM.values().length-1)||Integer.parseInt(input)<0){
+            if(Integer.parseInt(input)>(City.values().length-1)||Integer.parseInt(input)<0){
                 throw new IllegalArgumentException();
             }
-            currentPlayer.travel(CityENUM.getCity(Integer.parseInt(input)), costs[Integer.parseInt(input)]);
+           task= currentPlayer.travel(City.getCity(Integer.parseInt(input)), costs[Integer.parseInt(input)]);
+            if(!task.isSuccess){
+                ui.errorMessage(task.msg);
+                getUserInput();
+                return;
+            }
+            currentPlayer.setPlayerReady(true);
             if (Math.random() <= 0.1) {
                 Event event = createEvent();
-                TaskCompletionState task = event.process(currentPlayer);
+                task = event.process(currentPlayer);
                 if (task.isSuccess) {
                     currentDay += event.getDuration();
                     ui.errorMessage(event.getMessage());
@@ -409,7 +403,6 @@ public class Controller {
         try {
             int input = Integer.parseInt(getUserInput());
             bank.giveCredit(currentPlayer, input);
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
             getUserInput();
@@ -425,39 +418,50 @@ public class Controller {
         try {
             int input = Integer.parseInt(getUserInput());
             bank.reduceDebt(currentPlayer, input);
-            returnFlag = true;
         } catch (NumberFormatException e) {
             ui.errorMessage(YOU_DONT_ENTERED_A_NUMBER_TRY_AGAIN);
             getUserInput();
         }
     }
 
-    private int calculateTravelCosts(CityENUM city) {
+    private int calculateTravelCosts(City city) {
         int costs = (int) Math.round(city.getDistance(currentPlayer.getCurrentCityENUM()) * 10);
         return costs;
     }
 
     /**
-     * Check if the user traveled to end the current day
+     * Check if the players traveled to end the current day
      * on day end the bank interest charges will be added and
      * the new candy costs will be calculated.
      */
     private void nextDay() {
-        if (!returnFlag) {
+        boolean allReady=true;
+        for (Player player: players) {
+            if(!player.isPlayerReady()){
+                allReady=false;
+            }
+        }
+        if (allReady) {
             bank.nextDay();
             currentDay++;
             this.randomCityCosts();
+            for (Player player: players) {
+                player.setPlayerReady(false);
+            }
         }
-        returnFlag = false;
     }
 
     /**
      * If more than 30 days passed the game will end and the scoreboard will be shown for each player
      */
     private void endGame() {
+        int[] scores=new int[amountOfPlayers];
         if (currentDay == 30) {
-            ui.printScoreBoard((currentPlayer.getBalance()+bank.getPlayerAccount(currentPlayer).getPlayerAccountBalance()) -
-                    bank.getPlayerAccount(currentPlayer).getPlayerDebt());
+            for (Player player:players) {
+               scores[player.getNumber()-1] =(player.getBalance()+bank.getPlayerAccount(player).getPlayerAccountBalance()) -
+                        bank.getPlayerAccount(player).getPlayerDebt();
+            }
+            ui.printScoreBoard(amountOfPlayers,scores);
             ui.message("Press enter");
             getUserInput();
         }
@@ -483,34 +487,71 @@ public class Controller {
      * Method to calculate the candy cost of a city
      */
     private void randomCityCosts() {
-        for (Candy candy : Candy.values()) {
-            this.candys[candy.getID()] = r.nextInt(candy.minPrice(), candy.maxPrice());
+        for (City city: City.values()) {
+            for (Candy candy : Candy.values()) {
+                this.candys[city.getID()][candy.getID()] = r.nextInt(candy.minPrice(), candy.maxPrice());
+            }
         }
     }
 
+    /**
+     * Test if the player is broke.
+     * Check if he has enough money or candy.
+     */
+    private TaskCompletionState checkIfTravelIsPossible(int[]costs){
+        for(int i=0;i<costs.length;i++){
+            if(currentPlayer.getBalance()>=costs[i]){
+                return new TaskCompletionState("",true) ;
+            }
+        }
+        for (Candy candy:Candy.values()) {
+            if(currentPlayer.getItem(candy.getID())!=0){
+                return new TaskCompletionState("",true) ;
+            }
+        }
+        if (currentPlayer.getCurrentCityENUM().equals(bank.homecity)){
+            Account acc = bank.getPlayerAccount(currentPlayer);
+            if(0<acc.getPlayerAccountBalance()){
+                return new TaskCompletionState("",true) ;
+            }
+            for (Candy candy: Candy.values()) {
+                if (acc.getItemAmount(candy) > 0){
+                    return new TaskCompletionState("",true) ;
+                }
+            }
+        }
+        return new TaskCompletionState("Player is broke and cannot travel.",false);
+    }
     /**
      * Function for running the game
      */
     public void run() {
         this.randomCityCosts();
+        currentDay=29;
         while (this.currentDay < 30) {
-            for (Player player: players) {
-                currentPlayer=player;
+            for (int i=0;i<amountOfPlayers;) {
+                currentPlayer=players.get(i);
+                if(currentPlayer.isBroke()||currentPlayer.isPlayerReady()){
+                    continue;
+                }
             switch (state.name()) {
                 case "BANK" -> ui.printBankWindow(bank, currentPlayer);
-                case "MARKET" -> ui.printMarketWindow(candys, currentPlayer);
+                case "MARKET" -> ui.printMarketWindow(candys[currentPlayer.getCurrentCityENUM().getID()], currentPlayer);
                 default -> ui.printPlayerWindow(currentPlayer,
                         currentPlayer.getCurrentCityENUM() == bank.homecity);
             }
             this.handler(this.getUserInput());
-            this.nextDay();
+            if(currentPlayer.isPlayerReady()){
+                i+=1;
             }
+            }
+            this.nextDay();
         }
         this.endGame();
     }
 
     public static void main(String[] args) {
-        Controller controller = new Controller(1);
+        Controller controller = new Controller(5);
         controller.run();
     }
 }

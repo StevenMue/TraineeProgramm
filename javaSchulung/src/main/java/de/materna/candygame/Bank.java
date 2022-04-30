@@ -1,13 +1,13 @@
 package de.materna.candygame;
 
 import de.materna.candygame.enums.Candy;
-import de.materna.candygame.enums.CityENUM;
+import de.materna.candygame.enums.City;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    public final CityENUM homecity;
+    public final City homecity;
     private ArrayList<Account> accounts = new ArrayList<Account>();
 
     /**
@@ -15,16 +15,12 @@ public class Bank {
      * @param players a list of the players in game
      * @param homeCity the city of the bank
      */
-    public Bank(List<Player> players, CityENUM homeCity) {
+    public Bank(List<Player> players, City homeCity) {
         this.homecity = homeCity;
         for (Player player :
                 players) {
             createAccount(player);
         }
-    }
-
-    private Bank() {
-        this.homecity = CityENUM.BRONX;
     }
 
     /**

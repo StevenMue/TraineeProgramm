@@ -1,7 +1,7 @@
 package de.materna.candygame;
 
 import de.materna.candygame.enums.Candy;
-import de.materna.candygame.enums.CityENUM;
+import de.materna.candygame.enums.City;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,10 +18,10 @@ class BankTest {
 
     @BeforeEach
     void setUp() {
-        player = new Player(2000, CityENUM.CENTRAL);
+        player = new Player(0,2000, City.CENTRAL);
         players = new ArrayList<>();
         players.add(player);
-        bank = new Bank(players, CityENUM.BRONX);
+        bank = new Bank(players, City.BRONX);
         account = bank.getPlayerAccount(player);
     }
 
@@ -66,7 +66,7 @@ class BankTest {
 
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> bank.takeItems(new Player(10, CityENUM.BRONX), Candy.BONBON, 10),
+                () -> bank.takeItems(new Player(0,10, City.BRONX), Candy.BONBON, 10),
                 "Expected bank.takeItems to throw \"IllegalStateException\", but it didn't"
         );
         assertTrue(thrown.getMessage().contains("Player has no bank account."));
@@ -93,7 +93,7 @@ class BankTest {
 
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> bank.storeItems(new Player(10, CityENUM.BRONX), Candy.BONBON, 10),
+                () -> bank.storeItems(new Player(0,10, City.BRONX), Candy.BONBON, 10),
                 "Expected bank.storeItems to throw \"IllegalStateException\", but it didn't"
         );
         assertTrue(thrown.getMessage().contains("Player has no bank account."));
@@ -101,10 +101,10 @@ class BankTest {
 
     @Test
     void storeMoney() {
-        player = new Player(0, CityENUM.BRONX);
+        player = new Player(0,0, City.BRONX);
         players.remove(0);
         players.add(player);
-        bank = new Bank(players, CityENUM.BRONX);
+        bank = new Bank(players, City.BRONX);
         TaskCompletionState task = bank.storeMoney(player, 100);
         assertFalse(task.isSuccess);
         assertEquals(0, player.getBalance());
@@ -129,7 +129,7 @@ class BankTest {
 
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> bank.storeMoney(new Player(10, CityENUM.BRONX), 100),
+                () -> bank.storeMoney(new Player(0,10, City.BRONX), 100),
                 "Expected bank.storeMoney to throw \"IllegalStateException\", but it didn't"
         );
         assertTrue(thrown.getMessage().contains("Player has no bank account."));
@@ -155,7 +155,7 @@ class BankTest {
 
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> bank.takeMoney(new Player(10, CityENUM.BRONX), 100),
+                () -> bank.takeMoney(new Player(0,10, City.BRONX), 100),
                 "Expected bank.takeMoney to throw \"IllegalStateException\", but it didn't"
         );
         assertTrue(thrown.getMessage().contains("Player has no bank account."));
@@ -186,7 +186,7 @@ class BankTest {
 
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> bank.giveCredit(new Player(10, CityENUM.BRONX), 100),
+                () -> bank.giveCredit(new Player(0,10, City.BRONX), 100),
                 "Expected bank.giveCredit to throw \"IllegalStateException\", but it didn't"
         );
         assertTrue(thrown.getMessage().contains("Player has no bank account."));
@@ -213,7 +213,7 @@ class BankTest {
 
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> bank.reduceDebt(new Player(10, CityENUM.BRONX), 100),
+                () -> bank.reduceDebt(new Player(0,10, City.BRONX), 100),
                 "Expected bank.reduceDebt to throw \"IllegalStateException\", but it didn't"
         );
         assertTrue(thrown.getMessage().contains("Player has no bank account."));
@@ -222,7 +222,7 @@ class BankTest {
     @Test
     void createKonto() {
         assertDoesNotThrow(
-                () -> bank.createAccount(new Player(10, CityENUM.BRONX)),
+                () -> bank.createAccount(new Player(0,10, City.BRONX)),
                 "Expected bank.reduceDebt to throw \"IllegalStateException\", but it didn't"
         );
     }
@@ -231,7 +231,7 @@ class BankTest {
     void getPlayerAccount() {
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> bank.getPlayerAccount(new Player(10, CityENUM.BRONX)),
+                () -> bank.getPlayerAccount(new Player(0,10, City.BRONX)),
                 "Expected bank.getPlayerAccount to throw \"IllegalStateException\", but it didn't"
         );
         assertTrue(thrown.getMessage().contains("Player has no bank account."));

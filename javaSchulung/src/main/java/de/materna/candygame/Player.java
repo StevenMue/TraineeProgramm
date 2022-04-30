@@ -1,7 +1,7 @@
 package de.materna.candygame;
 
 import de.materna.candygame.enums.Candy;
-import de.materna.candygame.enums.CityENUM;
+import de.materna.candygame.enums.City;
 
 /**
  * Player Class contain the items and money of the player which are not stored.
@@ -9,8 +9,10 @@ import de.materna.candygame.enums.CityENUM;
  */
 public class Player {
     private int balance;
-    private CityENUM currentCityENUM;
-
+    private City currentCity;
+    private boolean isBroke;
+    private final int number;
+    private boolean playerReady;
     /**
      * Return the amount of candys the player have on this person
      * @param itemID The ID of the Candy
@@ -28,18 +30,18 @@ public class Player {
     private int[] items = new int[Candy.values().length];
     private int leftSpace = 100;
 
-    private Player() {
-    }
-
     /**
      * Constructor of the Player
      * @param balance How much money the player starts with.
-     * @param currentCityENUM The starting city for the player
-     * @see CityENUM
+     * @param currentCity The starting city for the player
+     * @see City
      */
-    public Player(int balance, CityENUM currentCityENUM) {
+    public Player(int number, int balance, City currentCity) {
         this.balance = balance;
-        this.currentCityENUM = currentCityENUM;
+        this.currentCity = currentCity;
+        this.isBroke=false;
+        this.number=number;
+        this.playerReady =false;
     }
 
     /**
@@ -53,10 +55,10 @@ public class Player {
     /**
      * Returns the city in which the player currently is.
      * @return the current city
-     * @see CityENUM
+     * @see City
      */
-    public CityENUM getCurrentCityENUM() {
-        return currentCityENUM;
+    public City getCurrentCityENUM() {
+        return currentCity;
     }
 
     /**
@@ -92,10 +94,13 @@ public class Player {
      * @return TaskCompletionState
      * @see TaskCompletionState
      */
-    public TaskCompletionState travel(CityENUM destination, int cost) {
+    public TaskCompletionState travel(City destination, int cost) {
+        if(currentCity.equals(destination)){
+            return new TaskCompletionState("You are already in that city.",false);
+        }
         TaskCompletionState state=this.reduceMoney(cost);
         if (state.isSuccess) {
-            this.currentCityENUM = destination;
+            this.currentCity = destination;
         }
         return state;
     }
@@ -156,5 +161,24 @@ public class Player {
             sb.append(candy.name()).append(": ").append(items[candy.getID()]).append(", ");
         }
         return "[balance:" + balance + ", currentCity:" + getCurrentCityENUM() + ", leftSpace:" + leftSpace + ", items:" + sb.toString() + "]";
+    }
+
+    public boolean isBroke() {
+        return isBroke;
+    }
+
+    public void setBroke(boolean broke) {
+        isBroke = broke;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+    public boolean isPlayerReady() {
+        return playerReady;
+    }
+
+    public void setPlayerReady(boolean playerReady) {
+        this.playerReady = playerReady;
     }
 }
